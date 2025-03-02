@@ -1,0 +1,29 @@
+
+
+
+// if (HAL_I2C_IsDeviceReady(&hi2c2, SHT30_ADDRESS, 3, HAL_MAX_DELAY) != HAL_OK) {
+//     printf("I2C device not responding!\n");
+// } else {
+//     printf("I2C device is ready!\n");
+// }
+
+// void MX_FREERTOS_Init(void) {
+//     // Create Queue for Sensor Data
+//     sensorQueueHandle = osMessageQueueNew(5, sizeof(float) * 2, NULL);
+//    printf("Dataqueue created\n");
+//     // Create SHT30 Task
+//     const osThreadAttr_t sht30Task_attributes = {
+//         .name = "SHT30Task",
+//         .priority = (osPriority_t) osPriorityNormal,
+//         .stack_size = 256 * 4
+//     };
+//     SHT30TaskHandle = osThreadNew(StartSHT30Task, NULL, &sht30Task_attributes);
+
+//     // Create UART Task
+//     const osThreadAttr_t uartTask_attributes = {
+//         .name = "UARTTask",
+//         .priority = (osPriority_t) osPriorityLow,
+//         .stack_size = 256 * 4
+//     };
+//     UARTTaskHandle = osThreadNew(StartUARTTask, NULL, &uartTask_attributes);
+//  }
