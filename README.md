@@ -8,4 +8,5 @@ The project utilises the SHT30 temperature and humidity sensor, a Hitachi 16x2 L
 2. PlatformIO plugin for VS Code
 3. STM32F4 development board
 4. Debugging tool
-5. toolchain-gccarmnoneeabi @ 1.120301.0 (12.3.1) (update platformio.ini if a different toolchain is used).
+5. Linux OS
+6. toolchain-gccarmnoneeabi @ 1.120301.0 (12.3.1) (update platformio.ini if a different toolchain is used).

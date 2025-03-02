@@ -13,13 +13,13 @@
 
 #define SHT30_ADDRESS 0x88  // SHT30 I2C Address (0x44)
 
+// Custom variable declared to store data from sensor
 
-osThreadId_t SHT30TaskHandle;
-//osThreadId_t UARTTaskHandle;
-
-
-// Queue Handle
-osMessageQueueId_t sensorQueueHandle;
+typedef struct
+{
+float temperature;
+float humidity;
+}SensorData_t;
 
 
 I2C_HandleTypeDef hi2c1;
@@ -29,26 +29,13 @@ UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 I2C_LCD_HandleTypeDef lcd1;
 
-
-typedef struct
-{
-float temperature;
-float humidity;
-}SensorData_t;
-
+//Define Task Handles
 SensorData_t SharedData;
 osThreadId_t sensorTaskHandle;
 osThreadId_t BluetoothTaskHandle;
 osThreadId_t USARTTaskHandle;
 osThreadId_t DisplayTaskHandle;
 
-/* Definitions for defaultTask */
-// osThreadId_t defaultTaskHandle;
-// const osThreadAttr_t defaultTask_attributes = {
-//   .name = "defaultTask",
-//   .stack_size = 128 * 4,
-//   .priority = (osPriority_t) osPriorityNormal,
-// };
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -68,17 +55,10 @@ void SHT30_Read(float*temperature, float*humidity);
 
 
 
-
-
-
-
 int main(void)
 {
 
-  
-
-
-  /* MCU Configuration------------*/
+  /* MCU Configuration*/
 
   HAL_Init();
 
@@ -93,17 +73,16 @@ int main(void)
   MX_I2C1_Init();
   MX_I2C2_Init();
   MX_USART1_UART_Init();
-  /* USER CODE BEGIN 2 */
+ 
 
-
-
+//LCD Init
   lcd1.hi2c1 = &hi2c1;
   lcd1.address = 0x4E;
   lcd_init(&lcd1);
 
 
 
-  // Task attributes (stack size and priority)
+// Task attributes (stack size and priority)
 const osThreadAttr_t sensorTask_attr = {
   .name = "SensorTask",
   .stack_size = 256 * 4,  // Stack size in bytes
@@ -128,8 +107,6 @@ const osThreadAttr_t i2cTask_attr = {
   .priority = osPriorityLow
 };
 
-
-
   /* Init scheduler */
   osKernelInitialize();
 
@@ -144,7 +121,6 @@ const osThreadAttr_t i2cTask_attr = {
   osKernelStart();
 
   
-
  
   while (1)
   {
@@ -153,7 +129,7 @@ const osThreadAttr_t i2cTask_attr = {
   
 }
 
-// Sersor Reas function
+// Sersor Read function
 
 void SHT30_Read(float*temperature, float*humidity) {
 
@@ -205,7 +181,7 @@ void Bluetooth_Task(void *argument)
 char Temperature[50];
 char Humidity[50];
  
-for (;;)
+while (1)
 {
 
 osThreadFlagsWait(0x01, osFlagsWaitAny, osWaitForever); 
