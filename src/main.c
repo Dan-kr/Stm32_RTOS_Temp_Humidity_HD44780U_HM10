@@ -162,7 +162,7 @@ void SHT30_Task(void *argument)
   while (1)
   
 {
-
+  // Read Sensor Data
   SHT30_Read(&SharedData.temperature,&SharedData.humidity);
 
   //Notify other tasks
@@ -176,6 +176,7 @@ void SHT30_Task(void *argument)
 }
 
 //Bluetooth Task
+
 void Bluetooth_Task(void *argument)
 {
 char Temperature[50];
@@ -184,7 +185,10 @@ char Humidity[50];
 while (1)
 {
 
+// Wait for notification 
 osThreadFlagsWait(0x01, osFlagsWaitAny, osWaitForever); 
+
+//Sending data to HM10 mudule via usart1
 sprintf(Temperature,"Tmp=%.2fC\r\n", SharedData.temperature);
 sprintf(Humidity,"Hum=%.2f%%\r\n", SharedData.humidity-7);
 HAL_UART_Transmit(&huart1, (uint8_t*)Temperature, strlen(Temperature), HAL_MAX_DELAY);
@@ -198,27 +202,34 @@ HAL_UART_Transmit(&huart1, (uint8_t*)Humidity, strlen(Humidity), HAL_MAX_DELAY);
 
 
 // USART Task
+
 void USART_Task(void *argument) {
   char message[50];
 
   while (1) {
+    // Wait for notification 
     osThreadFlagsWait(0x01, osFlagsWaitAny, osWaitForever);
 
-      // Read shared data
-      sprintf(message, "Temp=%.2fC, Hum=%.2f%%\r\n", SharedData.temperature, SharedData.humidity-7);
-      HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
+    // Read shared data
+    sprintf(message, "Temp=%.2fC, Hum=%.2f%%\r\n", SharedData.temperature, SharedData.humidity-7);
+    HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
   }
 }
 
 // LCD Display Task
+
 void I2C_Task(void *argument) {
   char Temperature[100];
   char Humidity[100];
+
+  // Convert float to string
   sprintf(Temperature, "Temp %.2f", SharedData.temperature);
   sprintf(Humidity, "Humidity %.2f%%", SharedData.humidity-7);
 
   while (1) {
+  // Wait for notification 
   osThreadFlagsWait(0x01, osFlagsWaitAny, osWaitForever); 
+  //Print Data to LCD
   lcd_clear(&lcd1);
   lcd_puts(&lcd1,Temperature);
   lcd_gotoxy(&lcd1, 0, 1);
