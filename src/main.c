@@ -13,7 +13,7 @@
 
 #define SHT30_ADDRESS 0x88  // SHT30 I2C Address (0x44)
 
-// Custom variable declared to store data from sensor
+// Custom data type declared to store data from sensor
 
 typedef struct
 {
