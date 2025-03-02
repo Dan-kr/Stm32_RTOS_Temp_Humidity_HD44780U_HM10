@@ -3,7 +3,7 @@
 FreeRTOS project for temperature and humidity measurements for STM32F4.
 The project utilises the SHT30 temperature and humidity sensor, a Hitachi 16x2 LCD (HD44780U), and an HM10 BLE module.
 
-## Requirements 
+###  Requirements 
 1.STM32CubeMX
 2.PlatformIO plugin for VS Code
 3.STM32F4 development board
